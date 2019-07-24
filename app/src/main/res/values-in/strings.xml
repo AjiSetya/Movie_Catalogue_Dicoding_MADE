@@ -5,6 +5,7 @@
     <string name="tv">TV</string>
     <string name="title_activity_main">Katalog Film</string>
     <string name="desc_poster_movie">Poster</string>
+    <string name="change_language_settings">Change language setting</string>
 
     <string-array name="title_movie">
         <item>A Star Is Born</item>
