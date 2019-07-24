@@ -1,6 +1,7 @@
 package com.blogspot.blogsetyaaji.moviecatalogue.Fragment;
 
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blogspot.blogsetyaaji.moviecatalogue.Activity.DetailActivity;
 import com.blogspot.blogsetyaaji.moviecatalogue.Adapter.MovieAdapter;
 import com.blogspot.blogsetyaaji.moviecatalogue.Model.Movie;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
@@ -28,8 +30,8 @@ public class MovieShowFragment extends Fragment {
     private String[] yearMovie;
     private String[] descriptionMovie;
     private TypedArray posterMovie;
-    private ArrayList<Movie> movieArrayList;
     private MovieAdapter movieAdapter;
+    private RecyclerView rvMovie;
 
 
     public MovieShowFragment() {
@@ -46,7 +48,7 @@ public class MovieShowFragment extends Fragment {
     }
 
     private void addItem() {
-        movieArrayList = new ArrayList<>();
+        ArrayList<Movie> movieArrayList = new ArrayList<>();
         for (int a = 0; a < titleMovie.length; a++) {
             Movie movie = new Movie();
             movie.setTitle(titleMovie[a]);
@@ -70,14 +72,30 @@ public class MovieShowFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rvMovie = view.findViewById(R.id.rv_movie);
         movieAdapter = new MovieAdapter(getActivity());
 
         prepareData();
         addItem();
+        showRecyclerList();
+    }
 
-        RecyclerView rvMovie = view.findViewById(R.id.rv_movie);
+    private void showRecyclerList() {
         rvMovie.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvMovie.setAdapter(movieAdapter);
 
+        movieAdapter.setOnItemClickCallback(new MovieAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Movie data) {
+                showSelectedMovie(data);
+            }
+        });
+    }
+
+    private void showSelectedMovie(Movie movie) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra(DetailActivity.KEY_DETAIL_DATA, movie);
+        intent.putExtra(DetailActivity.KEY_JENIS_DATA, "movie");
+        startActivity(intent);
     }
 }

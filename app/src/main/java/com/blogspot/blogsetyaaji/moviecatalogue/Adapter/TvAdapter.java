@@ -9,42 +9,42 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blogspot.blogsetyaaji.moviecatalogue.Model.Movie;
+import com.blogspot.blogsetyaaji.moviecatalogue.Model.TvShow;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> implements View.OnClickListener {
+public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> implements View.OnClickListener {
 
-    private ArrayList<Movie> listData;
+    private ArrayList<TvShow> listData;
     private Context context;
 
-    private OnItemClickCallback onItemClickCallback;
+    private TvAdapter.OnItemClickCallback onItemClickCallback;
 
-    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
+    public void setOnItemClickCallback(TvAdapter.OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
 
-    public void setListData(ArrayList<Movie> listData) {
+    public void setListData(ArrayList<TvShow> listData) {
         this.listData = listData;
     }
 
-    public MovieAdapter(Context context) {
+    public TvAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, viewGroup, false);
-        return new Holder(view);
+    public TvAdapter.Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_tvshow, viewGroup, false);
+        return new TvAdapter.Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Holder holder, int i) {
-        holder.titleMovie.setText(listData.get(i).getTitle());
-        holder.yearMovie.setText(listData.get(i).getYear());
-        holder.posterMovie.setImageResource(listData.get(i).getPoster());
+    public void onBindViewHolder(@NonNull final TvAdapter.Holder holder, int i) {
+        holder.titleTv.setText(listData.get(i).getTitle());
+        holder.yearTv.setText(listData.get(i).getYear());
+        holder.posterTv.setImageResource(listData.get(i).getPoster());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,19 +65,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> impl
     }
 
     class Holder extends RecyclerView.ViewHolder {
-        TextView titleMovie, yearMovie;
-        ImageView posterMovie;
+        TextView titleTv, yearTv;
+        ImageView posterTv;
 
         Holder(@NonNull View itemView) {
             super(itemView);
 
-            titleMovie = itemView.findViewById(R.id.title_movie);
-            yearMovie = itemView.findViewById(R.id.year_movie);
-            posterMovie = itemView.findViewById(R.id.poster_movie);
+            titleTv = itemView.findViewById(R.id.title_tv);
+            yearTv = itemView.findViewById(R.id.year_tv);
+            posterTv = itemView.findViewById(R.id.poster_tv);
         }
     }
 
     public interface OnItemClickCallback {
-        void onItemClicked(Movie data);
+        void onItemClicked(TvShow data);
     }
 }
