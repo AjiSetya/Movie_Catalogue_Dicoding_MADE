@@ -1,4 +1,4 @@
-package com.blogspot.blogsetyaaji.moviecatalogue.Adapter;
+package com.blogspot.blogsetyaaji.moviecatalogue.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,14 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blogspot.blogsetyaaji.moviecatalogue.Model.Movie;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> implements View.OnClickListener {
 
-    private ArrayList<Movie> listData;
+    private List<MovieItem> listData = new ArrayList<>();
     private Context context;
 
     private OnItemClickCallback onItemClickCallback;
@@ -25,8 +27,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> impl
         this.onItemClickCallback = onItemClickCallback;
     }
 
-    public void setListData(ArrayList<Movie> listData) {
-        this.listData = listData;
+    public void setListData(List<MovieItem> listData) {
+        this.listData.clear();
+        this.listData.addAll(listData);
+        notifyDataSetChanged();
     }
 
     public MovieAdapter(Context context) {
@@ -43,8 +47,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> impl
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int i) {
         holder.titleMovie.setText(listData.get(i).getTitle());
-        holder.yearMovie.setText(listData.get(i).getYear());
-        holder.posterMovie.setImageResource(listData.get(i).getPoster());
+        holder.yearMovie.setText(listData.get(i).getReleaseDate());
+
+        String baseUrlImage = "https://image.tmdb.org/t/p/original";
+        Glide.with(context).load(baseUrlImage + listData.get(i).getPosterPath())
+                .into(holder.posterMovie);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +85,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> impl
     }
 
     public interface OnItemClickCallback {
-        void onItemClicked(Movie data);
+        void onItemClicked(MovieItem data);
     }
 }

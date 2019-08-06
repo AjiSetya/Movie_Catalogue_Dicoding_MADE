@@ -1,4 +1,4 @@
-package com.blogspot.blogsetyaaji.moviecatalogue.Adapter;
+package com.blogspot.blogsetyaaji.moviecatalogue.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,24 +9,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blogspot.blogsetyaaji.moviecatalogue.Model.TvShow;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.tv.TvItem;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> implements View.OnClickListener {
+public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> {
 
-    private ArrayList<TvShow> listData;
+    private List<TvItem> listData = new ArrayList<>();
     private Context context;
 
-    private TvAdapter.OnItemClickCallback onItemClickCallback;
+    private OnItemClickCallback onItemClickCallback;
 
-    public void setOnItemClickCallback(TvAdapter.OnItemClickCallback onItemClickCallback) {
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
 
-    public void setListData(ArrayList<TvShow> listData) {
-        this.listData = listData;
+    public void setListData(List<TvItem> listData) {
+        this.listData.clear();
+        this.listData.addAll(listData);
+        notifyDataSetChanged();
     }
 
     public TvAdapter(Context context) {
@@ -35,16 +39,19 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> implements
 
     @NonNull
     @Override
-    public TvAdapter.Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_tvshow, viewGroup, false);
-        return new TvAdapter.Holder(view);
+        return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final TvAdapter.Holder holder, int i) {
-        holder.titleTv.setText(listData.get(i).getTitle());
-        holder.yearTv.setText(listData.get(i).getYear());
-        holder.posterTv.setImageResource(listData.get(i).getPoster());
+    public void onBindViewHolder(@NonNull final Holder holder, int i) {
+        holder.titleTv.setText(listData.get(i).getName());
+        holder.yearTv.setText(listData.get(i).getFirstAirDate());
+
+        String baseUrlImage = "https://image.tmdb.org/t/p/original";
+        Glide.with(context).load(baseUrlImage + listData.get(i).getPosterPath())
+                .into(holder.posterTv);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,11 +59,6 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> implements
                 onItemClickCallback.onItemClicked(listData.get(holder.getAdapterPosition()));
             }
         });
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override
@@ -78,6 +80,6 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.Holder> implements
     }
 
     public interface OnItemClickCallback {
-        void onItemClicked(TvShow data);
+        void onItemClicked(TvItem data);
     }
 }

@@ -1,4 +1,4 @@
-package com.blogspot.blogsetyaaji.moviecatalogue.Activity;
+package com.blogspot.blogsetyaaji.moviecatalogue.activity;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

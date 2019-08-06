@@ -1,7 +1,8 @@
-package com.blogspot.blogsetyaaji.moviecatalogue.Fragment;
+package com.blogspot.blogsetyaaji.moviecatalogue.fragment;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,22 +12,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.blogspot.blogsetyaaji.moviecatalogue.Activity.DetailActivity;
-import com.blogspot.blogsetyaaji.moviecatalogue.Adapter.TvAdapter;
-import com.blogspot.blogsetyaaji.moviecatalogue.Model.TvShow;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
+import com.blogspot.blogsetyaaji.moviecatalogue.activity.DetailActivity;
+import com.blogspot.blogsetyaaji.moviecatalogue.adapter.TvAdapter;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.tv.TvItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TVShowFragment extends Fragment {
 
-    private String[] titleTv;
-    private String[] yearTv;
-    private String[] descriptionTv;
-    private TypedArray posterTv;
     private TvAdapter tvAdapter;
     private RecyclerView rvTv;
+    private ProgressBar pgTv;
 
     public TVShowFragment() {
         // Required empty public constructor
@@ -37,29 +36,9 @@ public class TVShowFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void addItem() {
-        ArrayList<TvShow> tvArrayList = new ArrayList<>();
-        for (int a = 0; a < titleTv.length; a++) {
-            TvShow tvShow = new TvShow();
-            tvShow.setTitle(titleTv[a]);
-            tvShow.setYear(yearTv[a]);
-            tvShow.setDescription(descriptionTv[a]);
-            tvShow.setPoster(posterTv.getResourceId(a, -1));
-            tvArrayList.add(tvShow);
-        }
-
-        tvAdapter.setListData(tvArrayList);
-    }
-
-    private void prepareData() {
-        titleTv = getActivity().getResources().getStringArray(R.array.title_tv);
-        descriptionTv = getActivity().getResources().getStringArray(R.array.description_tv);
-        yearTv = getActivity().getResources().getStringArray(R.array.year_tv);
-        posterTv = getActivity().getResources().obtainTypedArray(R.array.poster_tv);
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tvshow, container, false);
@@ -69,13 +48,30 @@ public class TVShowFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvTv = view.findViewById(R.id.rv_tv);
-        tvAdapter = new TvAdapter(getActivity());
+        TvViewModel tvViewModel = ViewModelProviders.of(TVShowFragment.this)
+                .get(TvViewModel.class);
+        tvViewModel.getListTv().observe(this, getTv);
 
-        prepareData();
-        addItem();
+        rvTv = view.findViewById(R.id.rv_tv);
+        pgTv = view.findViewById(R.id.pg_tv);
+
+        tvAdapter = new TvAdapter(getActivity());
+        tvAdapter.notifyDataSetChanged();
+
+        tvViewModel.setListTv();
+        showLoading(true);
         showRecyclerList();
     }
+
+    private Observer<List<TvItem>> getTv = new Observer<List<TvItem>>() {
+        @Override
+        public void onChanged(@Nullable List<TvItem> tvItems) {
+            if (tvItems != null) {
+                tvAdapter.setListData(tvItems);
+                showLoading(false);
+            }
+        }
+    };
 
     private void showRecyclerList() {
         rvTv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -83,16 +79,24 @@ public class TVShowFragment extends Fragment {
 
         tvAdapter.setOnItemClickCallback(new TvAdapter.OnItemClickCallback() {
             @Override
-            public void onItemClicked(TvShow data) {
+            public void onItemClicked(TvItem data) {
                 showSelectedTv(data);
             }
         });
     }
 
-    private void showSelectedTv(TvShow data) {
+    private void showSelectedTv(TvItem data) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra(DetailActivity.KEY_DETAIL_DATA, data);
         intent.putExtra(DetailActivity.KEY_JENIS_DATA, "tv");
         startActivity(intent);
+    }
+
+    private void showLoading(Boolean state) {
+        if (state) {
+            pgTv.setVisibility(View.VISIBLE);
+        } else {
+            pgTv.setVisibility(View.GONE);
+        }
     }
 }

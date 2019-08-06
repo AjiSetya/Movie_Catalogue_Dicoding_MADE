@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/desc_poster_movie"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/poster_dragon" />
+            tools:srcCompat="@tools:sample/avatars" />
     </android.support.v7.widget.CardView>
 
     <TextView

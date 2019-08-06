@@ -1,4 +1,4 @@
-package com.blogspot.blogsetyaaji.moviecatalogue.Activity;
+package com.blogspot.blogsetyaaji.moviecatalogue.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.blogspot.blogsetyaaji.moviecatalogue.Fragment.MovieShowFragment;
-import com.blogspot.blogsetyaaji.moviecatalogue.Fragment.TVShowFragment;
+import com.blogspot.blogsetyaaji.moviecatalogue.fragment.MovieShowFragment;
+import com.blogspot.blogsetyaaji.moviecatalogue.fragment.TVShowFragment;
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
 
 public class MainActivity extends AppCompatActivity {
