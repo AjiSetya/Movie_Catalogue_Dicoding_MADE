@@ -5,8 +5,11 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.blogspot.blogsetyaaji.moviecatalogue.BuildConfig;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.ResponseMovie;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.search.movie.MovieSearchItem;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.search.movie.ResponseSearchMovie;
 import com.blogspot.blogsetyaaji.moviecatalogue.network.ApiClient;
 import com.blogspot.blogsetyaaji.moviecatalogue.network.ApiInterface;
 
@@ -17,7 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieViewModel extends ViewModel {
-    private static final String API_KEY = "5616d8192ad5a4eda23fc61bc5324daf";
+    private static final String API_KEY = BuildConfig.TMDB_API_KEY;;
     private MutableLiveData<List<MovieItem>> listMovies = new MutableLiveData<>();
 
     MutableLiveData<List<MovieItem>> getListMovies() {
@@ -39,6 +42,25 @@ public class MovieViewModel extends ViewModel {
             @Override
             public void onFailure(@NonNull Call<ResponseMovie> call, @NonNull Throwable t) {
                 Log.d("onFailureMovie ", t.getMessage());
+            }
+        });
+    }
+
+    void setListSearchMovies(String name) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseMovie> movieCall = apiInterface.getSearchMovies(API_KEY, name);
+        movieCall.enqueue(new Callback<ResponseMovie>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseMovie> call, @NonNull Response<ResponseMovie> response) {
+                if (response.body() != null) {
+                    listMovies.postValue(response.body().getResults());
+                    Log.d("onResponseSearchMovie ", response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseMovie> call, @NonNull Throwable t) {
+                Log.d("onFailureSearchMovie ", t.getMessage());
             }
         });
     }

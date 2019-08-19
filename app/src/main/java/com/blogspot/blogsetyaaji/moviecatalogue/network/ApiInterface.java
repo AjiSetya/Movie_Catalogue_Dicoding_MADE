@@ -1,6 +1,7 @@
 package com.blogspot.blogsetyaaji.moviecatalogue.network;
 
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.ResponseMovie;
+import com.blogspot.blogsetyaaji.moviecatalogue.model.search.movie.ResponseSearchMovie;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.tv.ResponseTv;
 
 import retrofit2.Call;
@@ -14,4 +15,13 @@ public interface ApiInterface {
 
     @GET("discover/tv")
     Call<ResponseTv> getTvShow(@Query("api_key") String apiKey);
+
+    @GET("search/movie")
+    Call<ResponseMovie> getSearchMovies(@Query("api_key") String apiKey,
+                                              @Query("query") String movieName);
+
+    @GET("search/tv")
+    Call<ResponseTv> getSearchTvShow(@Query("api_key") String apiKey,
+                                              @Query("query") String tvName);
+
 }

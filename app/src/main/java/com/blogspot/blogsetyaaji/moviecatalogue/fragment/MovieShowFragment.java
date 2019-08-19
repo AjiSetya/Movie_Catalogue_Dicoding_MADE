@@ -10,7 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -31,6 +35,7 @@ public class MovieShowFragment extends Fragment {
     private MovieAdapter movieAdapter;
     private RecyclerView rvMovie;
     private ProgressBar pgMovie;
+    private MovieViewModel movieViewModel;
 
 
     public MovieShowFragment() {
@@ -52,7 +57,7 @@ public class MovieShowFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MovieViewModel movieViewModel = ViewModelProviders.of(MovieShowFragment.this)
+        movieViewModel = ViewModelProviders.of(MovieShowFragment.this)
                 .get(MovieViewModel.class);
         movieViewModel.getListMovies().observe(this, getMovie);
 
@@ -66,6 +71,7 @@ public class MovieShowFragment extends Fragment {
         movieViewModel.setListMovies();
         showLoading(true);
         showRecyclerList();
+        setHasOptionsMenu(true);
     }
 
     private Observer<List<MovieItem>> getMovie = new Observer<List<MovieItem>>() {
@@ -103,5 +109,38 @@ public class MovieShowFragment extends Fragment {
         } else {
             pgMovie.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search_movie, menu);
+        final MenuItem searchItem = menu.findItem(R.id.nav_search_movie);
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.nav_search_movie).getActionView();
+        searchView.setQueryHint(getString(R.string.search_maches));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                /*Intent intent = new Intent(getActivity(), SearchMovie.class);
+                intent.putExtra("query", s);*/
+                movieViewModel.setListSearchMovies(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    searchItem.collapseActionView();
+                    movieViewModel.setListMovies();
+                }
+            }
+        });
     }
 }

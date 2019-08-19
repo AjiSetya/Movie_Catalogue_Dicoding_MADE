@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> implements View.OnClickListener {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> {
 
     private List<MovieItem> listData = new ArrayList<>();
     private Context context;
@@ -59,11 +59,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> impl
                 onItemClickCallback.onItemClicked(listData.get(holder.getAdapterPosition()));
             }
         });
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override

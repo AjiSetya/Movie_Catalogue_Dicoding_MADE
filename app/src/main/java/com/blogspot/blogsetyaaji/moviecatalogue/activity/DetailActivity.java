@@ -2,22 +2,37 @@ package com.blogspot.blogsetyaaji.moviecatalogue.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blogspot.blogsetyaaji.moviecatalogue.R;
+import com.blogspot.blogsetyaaji.moviecatalogue.db.MovieHelper;
+import com.blogspot.blogsetyaaji.moviecatalogue.db.TvHelper;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.tv.TvItem;
 import com.bumptech.glide.Glide;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
     public static String KEY_DETAIL_DATA = "detail_data";
     public static String KEY_JENIS_DATA = "jenis_data";
-    public String JenisData;
+    public String jenisData;
     private String title, year, description, poster;
+    private int id;
+    private Menu menuItem = null;
+    private Boolean isFavorite = false;
+    private MovieItem movie;
+    private TvItem tvShow;
+    private MovieHelper movieHelper;
+    private TvHelper tvHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +47,35 @@ public class DetailActivity extends AppCompatActivity {
         TextView txtDetailDescription = findViewById(R.id.txt_detail_description);
         ImageView imgDetailPoster = findViewById(R.id.img_detail_poster);
 
-        JenisData = getIntent().getStringExtra(KEY_JENIS_DATA);
 
-        if (JenisData.equals("movie")) {
-            MovieItem movie = getIntent().getParcelableExtra(KEY_DETAIL_DATA);
+
+        jenisData = getIntent().getStringExtra(KEY_JENIS_DATA);
+
+        if (jenisData.equals("movie")) {
+            movieHelper = MovieHelper.getInstance(getApplicationContext());
+            try {
+                movieHelper.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            movie = getIntent().getParcelableExtra(KEY_DETAIL_DATA);
+            id = movie.getId();
             title = movie.getTitle();
             year = movie.getReleaseDate();
             description = movie.getOverview();
             poster = movie.getPosterPath();
             setTitle(title);
-        } else if (JenisData.equals("tv")) {
-            TvItem tvShow = getIntent().getParcelableExtra(KEY_DETAIL_DATA);
+        } else if (jenisData.equals("tv")) {
+            tvHelper = TvHelper.getInstance(getApplicationContext());
+            try {
+                tvHelper.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            tvShow = getIntent().getParcelableExtra(KEY_DETAIL_DATA);
+            id = tvShow.getId();
             title = tvShow.getName();
             year = tvShow.getFirstAirDate();
             description = tvShow.getOverview();
@@ -56,13 +89,143 @@ public class DetailActivity extends AppCompatActivity {
 
         String baseUrlImage = "https://image.tmdb.org/t/p/original";
         Glide.with(this).load(baseUrlImage + poster).into(imgDetailPoster);
+
+        favoriteState();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.add_to_favorite:
+                if (isFavorite) {
+                    removeFromFavorite();
+                } else {
+                    addToFavorite();
+                }
+
+                isFavorite = !isFavorite;
+                setFavorite();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setFavorite() {
+        if (isFavorite) {
+            menuItem.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+        } else {
+            menuItem.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+        }
+    }
+
+    private void addToFavorite() {
+        if (jenisData.equals("movie")) {
+            long result = movieHelper.insertMovie(movie);
+
+            if (!(result > 0)) {
+                Toast.makeText(DetailActivity.this, R.string.msg_failed_Favorite, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DetailActivity.this, R.string.msg_success_Favorite, Toast.LENGTH_SHORT).show();
+            }
+        } else if (jenisData.equals("tv")) {
+            long result = tvHelper.insertTv(tvShow);
+
+            if (!(result > 0)) {
+                Toast.makeText(DetailActivity.this, R.string.msg_failed_Favorite, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DetailActivity.this, R.string.msg_success_Favorite, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void removeFromFavorite() {
+        if (jenisData.equals("movie")) {
+            long result = movieHelper.deleteMovie(id);
+
+            if (!(result > 0)) {
+                Toast.makeText(DetailActivity.this, R.string.failed_delete_favorite, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DetailActivity.this, R.string.success_delete_favorite, Toast.LENGTH_SHORT).show();
+            }
+        } else if (jenisData.equals("tv")) {
+            long result = tvHelper.deleteTv(id);
+
+            if (!(result > 0)) {
+                Toast.makeText(DetailActivity.this, R.string.failed_delete_favorite, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DetailActivity.this, R.string.success_delete_favorite, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        menuItem = menu;
+        setFavorite();
+        return true;
+    }
+
+    private void favoriteState() {
+        // cari data di dalam SQLite
+        // jika data ada maka set isFavorite = true
+        if (jenisData.equals("movie")) {
+
+            MovieItem movieItem = movieHelper.getMovieById(id);
+
+            if (movieItem != null) {
+                Log.d("detail", "favoriteState: data favorite ditemukan");
+                Log.d("detail", "favoriteState: " + movieItem);
+
+                List<MovieItem> movieItemList = new ArrayList<>();
+                movieItemList.add(0, movieItem);
+
+                if (movieItemList.isEmpty()) {
+                    isFavorite = false;
+                    Log.d("detail", "favoriteState: data favorite tidak ditemukan");
+                } else {
+                    isFavorite = true;
+                }
+            } else {
+                isFavorite = false;
+                Log.d("detail", "favoriteState: data favorite tidak ditemukan");
+            }
+
+        } else if (jenisData.equals("tv")) {
+
+            TvItem tvItem = tvHelper.getTvById(id);
+
+            if (tvItem != null) {
+                Log.d("detail", "favoriteState: data favorite ditemukan");
+                Log.d("detail", "favoriteState: " + tvItem);
+
+                List<TvItem> tvItemList = new ArrayList<>();
+                tvItemList.add(0, tvItem);
+
+                if (tvItemList.isEmpty()) {
+                    isFavorite = false;
+                    Log.d("detail", "favoriteState: data favorite tidak ditemukan");
+                } else {
+                    isFavorite = true;
+                }
+            } else {
+                isFavorite = false;
+                Log.d("detail", "favoriteState: data favorite tidak ditemukan");
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (jenisData.equals("movie")) {
+            movieHelper.close();
+        } else if (jenisData.equals("tv")) {
+            tvHelper.close();
+        }
     }
 }

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Katalog Film</string>
-    <string name="movie">FILM</string>
+    <string name="movie">Film</string>
     <string name="tv">TV</string>
     <string name="title_activity_main">Katalog Film</string>
     <string name="desc_poster_movie">Poster</string>
     <string name="change_language_settings">Ubah pengaturan bahasa</string>
+    <string name="title_favorite">Favorit</string>
+    <string name="msg_failed_Favorite">Gagal membuat favorit</string>
+    <string name="failed_delete_favorite">Gagal menghapus favorite</string>
+    <string name="msg_success_Favorite">Ditambah di favorite</string>
+    <string name="success_delete_favorite">Dihapus dari favorite</string>
+    <string name="action_search">Search</string>
+    <string name="search_maches">Search matches</string>
 </resources>
