@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
 
@@ -80,7 +79,7 @@ public class MovieHelper {
     public MovieItem getMovieById(int id) {
         Cursor cursor = database.query(
                 DATABASE_TABLE,
-                new String[]{_ID, TITLE,OVERVIEW, DATE, POSTER},
+                new String[]{_ID, TITLE, OVERVIEW, DATE, POSTER},
                 _ID + "=?",
                 new String[]{String.valueOf(id)},
                 null,
@@ -116,6 +115,38 @@ public class MovieHelper {
 
     public int deleteMovie(int id) {
         return database.delete(DATABASE_TABLE, _ID + "=?", new String[]{String.valueOf(id)});
+    }
+
+    public Cursor queryByIdProvider(String id) {
+        return database.query(DATABASE_TABLE, null
+                , _ID + " = ?"
+                , new String[]{id}
+                , null
+                , null
+                , null
+                , null);
+    }
+
+    public Cursor queryProvider() {
+        return database.query(DATABASE_TABLE
+                , null
+                , null
+                , null
+                , null
+                , null
+                , _ID + " ASC");
+    }
+
+    public long insertProvider(ContentValues values) {
+        return database.insert(DATABASE_TABLE, null, values);
+    }
+
+    public int updateProvider(String id, ContentValues values) {
+        return database.update(DATABASE_TABLE, values, _ID + " = ?", new String[]{id});
+    }
+
+    public int deleteProvider(String id) {
+        return database.delete(DATABASE_TABLE, _ID + " = ?", new String[]{id});
     }
 
 }
