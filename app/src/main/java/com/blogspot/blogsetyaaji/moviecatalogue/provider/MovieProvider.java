@@ -107,7 +107,7 @@ public class MovieProvider extends ContentProvider {
 
         int deleted;
         switch (sUriMatcher.match(uri)) {
-            case MOVIE:
+            case MOVIE_ID:
                 deleted = movieHelper.deleteProvider(uri.getLastPathSegment());
                 break;
             default:

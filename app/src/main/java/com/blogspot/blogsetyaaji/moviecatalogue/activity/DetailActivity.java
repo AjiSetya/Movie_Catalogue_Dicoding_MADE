@@ -1,5 +1,9 @@
 package com.blogspot.blogsetyaaji.moviecatalogue.activity;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,12 +18,20 @@ import com.blogspot.blogsetyaaji.moviecatalogue.db.MovieHelper;
 import com.blogspot.blogsetyaaji.moviecatalogue.db.TvHelper;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.tv.TvItem;
+import com.blogspot.blogsetyaaji.moviecatalogue.widget.FavoriteWidget;
 import com.bumptech.glide.Glide;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static android.provider.BaseColumns._ID;
+import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.MovieColumns.CONTENT_URI;
+import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.MovieColumns.DATE;
+import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.MovieColumns.OVERVIEW;
+import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.MovieColumns.POSTER;
+import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.MovieColumns.TITLE;
 
 public class DetailActivity extends AppCompatActivity {
     public static String KEY_DETAIL_DATA = "detail_data";
@@ -123,13 +135,24 @@ public class DetailActivity extends AppCompatActivity {
 
     private void addToFavorite() {
         if (jenisData.equals("movie")) {
-            long result = movieHelper.insertMovie(movie);
+//            long result = movieHelper.insertMovie(movie);
+            ContentValues values = new ContentValues();
 
-            if (!(result > 0)) {
-                Toast.makeText(DetailActivity.this, R.string.msg_failed_Favorite, Toast.LENGTH_SHORT).show();
-            } else {
+            values.put(_ID, id);
+            values.put(TITLE, title);
+            values.put(DATE, year);
+            values.put(OVERVIEW, description);
+            values.put(POSTER, poster);
+
+            getContentResolver().insert(CONTENT_URI, values);
+
+//            if (!(result > 0)) {
+//                Toast.makeText(DetailActivity.this, R.string.msg_failed_Favorite, Toast.LENGTH_SHORT).show();
+//            } else {
+                updateFavoriteWidget(this);
+
                 Toast.makeText(DetailActivity.this, R.string.msg_success_Favorite, Toast.LENGTH_SHORT).show();
-            }
+//            }
         } else if (jenisData.equals("tv")) {
             long result = tvHelper.insertTv(tvShow);
 
@@ -143,11 +166,16 @@ public class DetailActivity extends AppCompatActivity {
 
     private void removeFromFavorite() {
         if (jenisData.equals("movie")) {
-            long result = movieHelper.deleteMovie(id);
+//            long result = movieHelper.deleteMovie(id);
+            int result = getContentResolver().delete(Uri.parse(CONTENT_URI + "/" + id),
+                    null,
+                    null);
 
             if (!(result > 0)) {
                 Toast.makeText(DetailActivity.this, R.string.failed_delete_favorite, Toast.LENGTH_SHORT).show();
             } else {
+                updateFavoriteWidget(this);
+
                 Toast.makeText(DetailActivity.this, R.string.success_delete_favorite, Toast.LENGTH_SHORT).show();
             }
         } else if (jenisData.equals("tv")) {
@@ -159,6 +187,13 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(DetailActivity.this, R.string.success_delete_favorite, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public static void updateFavoriteWidget(Context context)
+    {
+        Intent intent = new Intent(context, FavoriteWidget.class);
+        intent.setAction(FavoriteWidget.UPDATE_WIDGET);
+        context.sendBroadcast(intent);
     }
 
     @Override

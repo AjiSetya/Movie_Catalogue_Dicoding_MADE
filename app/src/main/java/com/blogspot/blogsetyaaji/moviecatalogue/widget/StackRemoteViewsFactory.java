@@ -22,7 +22,7 @@ import static com.blogspot.blogsetyaaji.moviecatalogue.db.DatabaseContract.Movie
 
 public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private final Context context;
-    private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+    private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
     private Cursor cursor;
 
     StackRemoteViewsFactory(Context context) {
@@ -71,7 +71,7 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         MovieItem movieItem = getItem(position);
 
         Bitmap bmp = null;
-        String poster_url = IMAGE_BASE_URL + movieItem.getPosterPath();
+        String poster_url = IMAGE_BASE_URL + "w342" + movieItem.getPosterPath();
         String movie_title = movieItem.getTitle();
         String date = movieItem.getReleaseDate();
 

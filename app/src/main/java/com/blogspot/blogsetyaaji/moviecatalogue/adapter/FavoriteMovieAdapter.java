@@ -20,7 +20,7 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
 
     private ArrayList<MovieItem> listData = new ArrayList<>();
     private Context context;
-    private MovieAdapter.OnItemClickCallback onItemClickCallback;
+    private OnItemClickCallback onItemClickCallback;
 
     public ArrayList<MovieItem> getListMovies() {
         return listData;
@@ -56,7 +56,7 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
         notifyItemRangeChanged(position,listData.size());
     }
 
-    public void setOnItemClickCallback(MovieAdapter.OnItemClickCallback onItemClickCallback) {
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
 

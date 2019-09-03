@@ -146,7 +146,7 @@ public class MovieHelper {
     }
 
     public int deleteProvider(String id) {
-        return database.delete(DATABASE_TABLE, _ID + " = ?", new String[]{id});
+        return database.delete(DATABASE_TABLE, _ID + "=?", new String[]{id});
     }
 
 }
