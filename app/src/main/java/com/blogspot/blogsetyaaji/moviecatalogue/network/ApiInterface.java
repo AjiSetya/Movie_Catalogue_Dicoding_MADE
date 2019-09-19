@@ -24,4 +24,9 @@ public interface ApiInterface {
     Call<ResponseTv> getSearchTvShow(@Query("api_key") String apiKey,
                                               @Query("query") String tvName);
 
+    @GET("discover/movie")
+    Call<ResponseMovie> getReleaseMovie(@Query("api_key") String apiKey,
+                                        @Query("primary_release_date.gte") String todayGte,
+                                        @Query("primary_release_date.lte") String todayLte);
+
 }

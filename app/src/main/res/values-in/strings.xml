@@ -16,4 +16,16 @@
     <string name="appwidget_text">Favorit Film</string>
     <string name="add_widget">Tambah widget</string>
     <string name="empty_text">Tidak ada data</string>
+    <string name="daily_reminder_title">Pengingat harian</string>
+    <string name="daily_summary_off">Tidak ada pemberitahuan</string>
+    <string name="language_header">Bahasa</string>
+    <string name="language_title">Ubah bahasa</string>
+    <string name="notification_header">Notofokasi</string>
+    <string name="release_reminder_title">Film rilis baru</string>
+    <string name="release_summary_off">Tidak ada pemberitahuan film rilis</string>
+    <string name="release_summary_on">Notifikasi setiap jam 8 pagi</string>
+    <string name="daily_summary_on">Notifikasi setiap jam 7 pagi</string>
+    <string name="title_activity_settings">Pengaturan</string>
+    <string name="today">Today</string>
+    <string name="release">release !</string>
 </resources>

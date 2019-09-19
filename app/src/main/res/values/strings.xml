@@ -15,4 +15,29 @@
     <string name="appwidget_text">Favorite Movie</string>
     <string name="add_widget">Add widget</string>
     <string name="empty_text">No data</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="language_header">Language</string>
+    <string name="notification_header">Notification</string>
+
+    <!-- Language Preferences -->
+    <string name="language_title">Change language</string>
+
+    <!-- Sync Preferences -->
+    <string name="daily_reminder_title">Daily Reminder</string>
+    <string name="release_reminder_title">New Release Movies</string>
+    <string name="release_summary_on">Notification every 8 AM
+    </string>
+    <string name="release_summary_off">No notification</string>
+    <string name="daily_summary_on">Notification every 7 AM
+    </string>
+    <string name="daily_summary_off">No notification</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="release_set">Release reminder has been set !</string>
+    <string name="today">Today</string>
+    <string name="release">release !</string>
+
 </resources>
