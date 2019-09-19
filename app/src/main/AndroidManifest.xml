@@ -4,10 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <permission android:name="com.blogspot.blogsetyaaji.moviecatalogue.READ_DATABASE"
-        android:protectionLevel="normal"/>
-    <permission android:name="com.blogspot.blogsetyaaji.moviecatalogue.WRITE_DATABASE"
-        android:protectionLevel="normal"/>
+    <permission
+        android:name="com.blogspot.blogsetyaaji.moviecatalogue.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.blogspot.blogsetyaaji.moviecatalogue.WRITE_DATABASE"
+        android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -16,10 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".alarm.ReleaseAlarm"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings" />
 
         <provider
-            android:authorities="com.blogspot.blogsetyaaji.moviecatalogue"
             android:name=".provider.MovieProvider"
+            android:authorities="com.blogspot.blogsetyaaji.moviecatalogue"
             android:exported="true"
             android:readPermission="com.blogspot.blogsetyaaji.moviecatalogue.READ_DATABASE"
             android:writePermission="com.blogspot.blogsetyaaji.moviecatalogue.WRITE_DATABASE" />

@@ -1,15 +1,13 @@
 package com.blogspot.blogsetyaaji.moviecatalogue.fragment;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.blogspot.blogsetyaaji.moviecatalogue.BuildConfig;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.ResponseMovie;
 import com.blogspot.blogsetyaaji.moviecatalogue.model.movie.MovieItem;
-import com.blogspot.blogsetyaaji.moviecatalogue.model.search.movie.MovieSearchItem;
-import com.blogspot.blogsetyaaji.moviecatalogue.model.search.movie.ResponseSearchMovie;
 import com.blogspot.blogsetyaaji.moviecatalogue.network.ApiClient;
 import com.blogspot.blogsetyaaji.moviecatalogue.network.ApiInterface;
 
@@ -20,10 +18,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieViewModel extends ViewModel {
-    private static final String API_KEY = BuildConfig.TMDB_API_KEY;;
+    private static final String API_KEY = BuildConfig.TMDB_API_KEY;
     private MutableLiveData<List<MovieItem>> listMovies = new MutableLiveData<>();
 
-    MutableLiveData<List<MovieItem>> getListMovies() {
+    public MutableLiveData<List<MovieItem>> getListMovies() {
         return listMovies;
     }
 

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FavoriteFragment">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,9 +14,9 @@
         app:tabIndicatorColor="@color/colorAccent"
         app:tabSelectedTextColor="@color/tabTextSelected"
         app:tabTextColor="@color/tabText">
-    </android.support.design.widget.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

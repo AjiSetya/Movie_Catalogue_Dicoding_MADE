@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_change_settings"
-        android:title="@string/change_language_settings"
-        app:showAsAction="never"/>
+        android:enabled="true"
+        android:icon="@drawable/ic_more_vert_black"
+        android:title="@string/title_activity_settings"
+        android:visible="true"
+        app:showAsAction="always" />
 </menu>
