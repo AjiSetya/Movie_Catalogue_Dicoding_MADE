@@ -4,6 +4,7 @@
 
         <Preference
             app:key="language"
+            app:icon="@drawable/ic_language_black"
             app:title="@string/language_title"
             app:useSimpleSummaryProvider="true" />
 
@@ -13,6 +14,7 @@
 
         <SwitchPreferenceCompat
             app:key="daily_reminder"
+            app:icon="@drawable/ic_notifications_black"
             app:title="@string/daily_reminder_title"
             app:summaryOff="@string/daily_summary_off"
             app:summaryOn="@string/daily_summary_on"/>
@@ -20,6 +22,7 @@
         <SwitchPreferenceCompat
             app:key="relase_reminder"
             app:summaryOff="@string/release_summary_off"
+            app:icon="@drawable/ic_notifications_black"
             app:summaryOn="@string/release_summary_on"
             app:title="@string/release_reminder_title" />
 

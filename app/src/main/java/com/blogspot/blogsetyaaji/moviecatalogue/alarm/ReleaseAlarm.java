@@ -1,5 +1,6 @@
 package com.blogspot.blogsetyaaji.moviecatalogue.alarm;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -67,7 +68,7 @@ public class ReleaseAlarm extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 5);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -130,6 +131,7 @@ public class ReleaseAlarm extends BroadcastReceiver {
         });
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class generatePictureStyleNotification extends AsyncTask<String, Void, Bitmap>{
         private Context context;
         private MovieItem movieItem;
