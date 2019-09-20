@@ -22,6 +22,10 @@
             android:name=".alarm.ReleaseAlarm"
             android:enabled="true"
             android:exported="true"></receiver>
+        <receiver
+            android:name=".alarm.DailyAlarm"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
         <activity
             android:name=".activity.SettingsActivity"

@@ -182,7 +182,7 @@ public class ReleaseAlarm extends BroadcastReceiver {
             String notifTitle = context.getResources().getString(R.string.release_reminder_title);
 
             Notification.Builder builder = new Notification.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notif_app)
                     .setLargeIcon(bitmap)
                     .setContentTitle(notifTitle)
                     .setContentText(movieItem.getTitle())

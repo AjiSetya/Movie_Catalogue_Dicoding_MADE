@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
@@ -100,7 +101,7 @@ public class DailyAlarm extends BroadcastReceiver {
         Log.d(TAG, "onReceiveDailyAlarm: masuk");
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.M)
     private void shoNotificaton(Context context) {
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -111,11 +112,10 @@ public class DailyAlarm extends BroadcastReceiver {
         String notifTitle = context.getString(R.string.app_name);
         String notifText = context.getString(R.string.daily_reminder_text);
 
-        Drawable drawable = context.getResources().getDrawable(R.mipmap.ic_launcher);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-
         Notification.Builder builder = new Notification.Builder(context)
-                .setLargeIcon(bitmap)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.ic_notif_app))
+                .setSmallIcon(R.drawable.ic_notif_app)
                 .setContentTitle(notifTitle)
                 .setContentText(notifText)
                 .setAutoCancel(true)
